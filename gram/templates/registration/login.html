@@ -1,0 +1,76 @@
+{%extends "registration/base.html"%}
+{% load bootstrap4 %}
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://kit.fontawesome.com/fc1e235b2e.js"></script>
+    <link rel="stylesheet" href="{% static 'assets2/style.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Overpass+Mono" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <title>Instagram | Login </title>
+</head>
+
+<body>
+    <br><br>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-3">
+        <div class="card">
+            <div id="wrapper">
+                <div class="main-content">
+                    <br>
+                    <div class="header">
+                        <img style="text-align:center; margin-left: 110px;"src="https://i.imgur.com/zqpwkLQ.png" />
+                    </div>
+                    <div class="l-part">
+                        <br>
+                        <form style="margin:20px;" action="" method="POST">{% csrf_token %}
+                            {% bootstrap_form form%}
+                            <button class="form-btn btn-info btn-md" style="padding-left:130px;padding-right:130px; margin:20px;"
+                                type="submit">Log in</button>
+                            <br><br>
+
+                            <p class="has-separator" style="margin-left: 150px;">Or</p>
+                            <br>
+                            <a class="facebook-login" style="margin-left: 100px;"  href="https://www.facebook.com/">
+                                <i class="fab fa-facebook-square"></i> Log in with Facebook
+                            </a>
+                            <br><br>
+                            <a class="password-reset" style="margin-left: 125px;" href="#">Forgot password?</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+                <div class="card">
+                    <div class="r-part">
+                        <div class="sign-up" style="padding:5%;">
+                            <span style="margin-left: 50px;">Don't have an account?<a href="#">Sign up</a></span>
+                        </div>
+                    </div>
+                </div>
+                    <div class="get-the-app">
+                        <span style="margin-left: 140px;">Get the app.</span><br><br>
+                        <div class="badges d-flex">
+                            <img src="{% static 'images/appstore.jpeg' %}" alt="app-store badge" width="200"height="100">
+
+                            <img src="{% static '/images/playstore.png' %}" alt="google-play badge" width="180"
+                                height="50" style="margin-top:24px;">
+
+                        </div>
+                    </div>
+            </div>
+</div>
+        <div class="col-md-4"></div>
+    </div>
+
+</body>
+
+</html>
+{% endblock %}
