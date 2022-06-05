@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="pt-5 pb-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <!-- Instructor image START -->
+                <div class="media">
+                    <div class="media-image">
+                        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}" alt="course image">
+                    </div>
+                </div>
+            </div>
+            <!-- Instructor image END -->
+            <div class="media-body col-md-3">
+                <div class="d-flex" style="justify-content:space-evenly;">
+                    <div class="username">
+                        <h6><strong class="account-heading">{{ user.username }}</strong></h6>
+                    </div>
+                    <div class="button">
+                        <a href="{% url 'update_profile' %}" style="color: rgb(0, 119, 255);"><button class="form-btn"
+                                type="submit">Edit Profile</button></a>
+                    </div>
+                    <div class="settings">
+                        <a class="dropdown-item" href="#"><img src="{% static 'images/settings.png' %}" rel="stylesheet"
+                                type="text/css" viewBox="0 0 24 24" width="30"></a>
+                    </div>
+                </div><br><br>
+                <div class="d-flex" style="justify-content:space-between;">
+                    <div class="posts">
+                        <h6><strong>{{ user.profile.posts.count }}</strong></h6>
+                        <h6>Posts</h6>
+                    </div>
+                    <div class="followers">
+                        <h6><strong>{{ user.profile.followers.count }}</strong></h6>
+                        <h6>Followers</h6>
+                    </div>
+                    <div class="following">
+                        <h6>Following</h6>
+                    </div>
+                </div>
+                <h5>{{ user.username }}</h5>
+                <p>{{ user.bio }}</p>
+                <p>{{ user.url }}</p>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <!-- Row End -->
+        <!-- Left sidebar END -->
+
+    </div>
+</section>
+{% endblock content %}
