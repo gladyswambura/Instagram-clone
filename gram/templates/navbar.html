@@ -1,9 +1,8 @@
 {% load static %}
 <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap" rel="stylesheet">
 <link href="//netdna.bootstrapcdn.com/font-awesome/6.1.1/css/font-awesome.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="stylesheet" href=" {% static '/css/style.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 <main>
     <div class="container">
         <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
@@ -11,16 +10,19 @@
                 <span class="fs-2" style="font-family: 'Grand Hotel', cursive;">Instagram</span>
             </a>
 
-            <ul class="nav">
+            <ul class="nav col-12 col-md-auto mb-2 mb-md-0">
                 <div class="justify-content-md-center">
-                <form class="form-inline" action=" #" method="GET" style="margin:auto;max-width:300px">
-                    <input class="form-control mr-sm-2" type="search" placeholder="&#xF002 Search" aria-label="Search"
-                        name="search" value="{{ request.GET.search }}">
-                </form>
+                    <form class="form-inline" action=" #" method="GET" style="margin:auto;max-width:300px">
+                        <input type="search" width="20%" class="form-control mr-sm-2" placeholder=" &#xF002; Search"
+                            aria-label="Search" name="search_user" value="{{ request.GET.search }}">
+                        <div style="width:10% ;" class="input-group-btn btn-"></div>
+                    </form>
                 </div>
+                {% if request.user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <img src="{% static 'images/home.png' %}"rel="stylesheet" type="text/css"viewBox="0 0 24 24"width="24"></a>
+                    <a class="nav-link" href="/">
+                        <img src="{% static 'images/home.png' %}" rel="stylesheet" type="text/css" viewBox="0 0 24 24"
+                            width="24"></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">
@@ -28,7 +30,7 @@
                             viewBox="0 0 24 24" width="24"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{% url 'newpost'%}">
                         <img src="{% static 'images/newpost.png' %}" rel="stylesheet" type="text/css" width="24"
                             height="24"></a>
                 </li>
@@ -42,19 +44,31 @@
                         <img src="{% static 'images/love.png' %}" rel="stylesheet" type="text/css" width="24"
                             height="24"></a>
                 </li>
-                 <li class="nav-item dropdown">
-                     <a class="nav-link dropdown-toggle" href="#" id="dropdown10" data-bs-toggle="dropdown" aria-expanded="false">
-                         <img src="{% static 'images/user.png' %}" rel="stylesheet" type="text/css" width="24"
-                             height="24"></a>
-                     <ul class="dropdown-menu" aria-labelledby="dropdown10">
-                         <li><a class="dropdown-item" href="#">Profile</a></li>
-                         <li><a class="dropdown-item" href="#">Saved</a></li>
-                         <li><a class="dropdown-item" href="#">Settings</a></li>
-                         <li><a class="dropdown-item" href="#">Switch Accounts</a></li>
-                         <li><a class="dropdown-item" href="#">Log Out</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown10" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <img src="{% static 'images/user.png' %}" rel="stylesheet" type="text/css" width="24"
+                            height="24"></a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown10">
+                        <li><a class="dropdown-item" href="{% url 'profile'%}"><img
+                                    src="{% static 'images/profile.png' %}"
+                                    rel="stylesheet" type="text/css" viewBox="0 0 24 24" width="18">Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><img src="{% static 'images/saved.png' %}"
+                                    rel="stylesheet" type="text/css" viewBox="0 0 24 24" width="15">Saved</a></li>
+                        <li><a class="dropdown-item" href="#"><img src="{% static 'images/settings.png' %}"
+                                    rel="stylesheet" type="text/css" viewBox="0 0 24 24" width="15">Settings</a></li>
+                        <li><a class="dropdown-item" href="#"><img src="{% static 'images/switchaccounts.png' %}"
+                                    rel="stylesheet" type="text/css" viewBox="0 0 24 24" width="12">Switch Accounts</a>
+                        </li>
+                        <li><a class="dropdown-item" style=" border-top: 0.8px solid;" href="#">Log Out</a></li>
 
-                     </ul>
-                 </li
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                {% endif %}
             </ul>
         </header>
     </div>
