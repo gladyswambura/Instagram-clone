@@ -65,7 +65,7 @@
                 </div><br>
                 <div class="media-body">
                     <a href="{% url 'post-detail' post.id %}"><img class="post_media" src="{{ post.picture.url }}"
-                            alt="Post" style="width: 700px; height: 348px; object-fit: cover;"></a>
+                            alt="Post" style="width: 500px; height: 348px; object-fit: cover;"></a>
                     <div class="d-flex">
                         <div class="like-button">
                             <a href="#"><img src="{% static 'images/like.png' %}" alt="" width="30"></a>
@@ -81,14 +81,13 @@
                         </div>
                     </div>
                 </div>
-                {% for comment in post.comments %}
-                <div class="media">
-                    <div class="media-image">
-                        <img class="rounded-circle article-image" src="{{ comment.user.profile.image}}" alt=""
-                            width="66" height="66">
+                <div class="d-flex">
+                    <div class="user-image">
+                        <img class="rounded-circle article-image" src="{{ request.user.profile.image.url}}" alt=""
+                            width="50" height="50">
                     </div>
-                    <div class="media-body">
-                        <p>{{comment.text}}</p>
+                    <div class="media-body ml-3 pt-3">
+                        <p>Liked by <p>{{post.likes.count}}</p>{{post.post_likes}}</p>
                     </div>
                 </div>
                 <div class="post__description">
@@ -98,8 +97,7 @@
 
                     </span>
                 </div>
-                {% endfor %}
-                <small class="text-muted">{{ post.posted|date:"F j, Y" }}</small>
+                <small class="text-muted">{{ post.posted|timesince }}</small>
                 {% endfor %}
             </article>
         </div>
