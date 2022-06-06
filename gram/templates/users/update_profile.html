@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
 {% load static %}
-{% load crispy_forms_tags %}
 {% block content %}
 <br><br>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,33 +13,25 @@
     <link rel="stylesheet" href="{% static 'images/style.css' %}">
     <title>Edit-Profile</title>
 </head>
-
 <body>
-
-    <div id="wrapper">
-        <div class="container">
-            <div class="phone-app-ddemo"></div>
-            <div class="form-data">
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <fieldset class="formgroup">
-                        <legend class="border-bottom mb-4">Profile Info</legend>
-                        {{updateprofile|cripsy }}
-                        {{userupdate|cripsy }}
-                        {{form.image}} <br>
-                        {{form.first_name}} <br>
-                        {{form.last_name}} <br>
-                        {{form.bio}} <br>
-                        {{form.location}} <br>
-                        {{form.url}} <br>
-                    </fieldset>
-                    <div class="form-group">
-                        <button class="form-btn" type="submit">Update Profile</button>
-                    </div>
-                </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-data">
+                    <form action="{% url 'newpost' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% bootstrap_form updateprofile %}
+                        <div class="form-group">
+                            <button class="form-btn" type="submit" value="Update">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
             </div>
+            <div class="col-md-3"></div>
         </div>
     </div>
 </body>
 </html>
-{% endblock content %}
+<br><br><br><br><br><br><br><br><br>
+{% endblock %}
