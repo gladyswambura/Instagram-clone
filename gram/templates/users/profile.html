@@ -4,52 +4,102 @@
 <section class="pt-5 pb-0">
     <div class="container">
         <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-4">
+            <div class="col-md-3"></div>
+            <div class="col-md-3">
                 <!-- Instructor image START -->
                 <div class="media">
                     <div class="media-image">
-                        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}" alt="course image">
+                        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}" alt="course image"
+                            height="200" width="200">
                     </div>
                 </div>
             </div>
             <!-- Instructor image END -->
-            <div class="media-body col-md-3">
-                <div class="d-flex" style="justify-content:space-evenly;">
-                    <div class="username">
-                        <h6><strong class="account-heading">{{ user.username }}</strong></h6>
+            <div class="media-body col-md-4">
+                <fieldset class="formgroup">
+                    <div class="d-flex">
+                        <div class="media-image">
+                            <h2>{{user.username}}</h2>
+                        </div>
+                        <div class="form-group ml-3 pt-2">
+                            <a href="{% url 'update_profile' %}" ><button class="form-btn btn-md" type="submit"
+                                value="Update">Edit Profile</button></a>
+                        </div>
+                        <div class="setting ml-3 pt-2">
+                            <a class="dropdown-item" href="#"><img src="{% static 'images/settings.png' %}"
+                                    rel="stylesheet" type="text/css" viewBox="0 0 24 24" width="35"></a>
+                        </div>
                     </div>
-                    <div class="button">
-                        <a href="{% url 'update_profile' %}" style="color: rgb(0, 119, 255);"><button class="form-btn"
-                                type="submit">Edit Profile</button></a>
+                    <div>
+                        <h4 class="ml-3 pt-2">
+                            <small>Username:<strong>{{user.username}}</strong></small>
+                        </h4>
+                        <h4 class="ml-3 pt-2">
+                            <small>First Name: <strong>{{user.profile.first_name}}</strong></small>
+                        </h4>
+                        <h4 class="ml-3 pt-2">
+                            <small>Last Name: <strong>{{user.profile.last_name}}</strong></small>
+                        </h4>
+                        <h4 class="ml-3 pt-2">
+                            <small>Location: <strong>{{user.profile.location}}</strong></small>
+                        </h4>
+                        <h4 class="ml-3 pt-2">
+                            <small>Url: <a href="#">{{user.profile.url}}</a></small>
+                        </h4>
+                        <h6 class=" ml-3 pt-2">Bio: <small>{{user.profile.bio}}</small></h6>
+                        <br>
+                        <h5 class='text-secondary'>Email: <i> {{ user.email }}</i></h5>
                     </div>
-                    <div class="settings">
-                        <a class="dropdown-item" href="#"><img src="{% static 'images/settings.png' %}" rel="stylesheet"
-                                type="text/css" viewBox="0 0 24 24" width="30"></a>
-                    </div>
-                </div><br><br>
-                <div class="d-flex" style="justify-content:space-between;">
-                    <div class="posts">
-                        <h6><strong>{{ user.profile.posts.count }}</strong></h6>
-                        <h6>Posts</h6>
-                    </div>
-                    <div class="followers">
-                        <h6><strong>{{ user.profile.followers.count }}</strong></h6>
-                        <h6>Followers</h6>
-                    </div>
-                    <div class="following">
-                        <h6>Following</h6>
-                    </div>
-                </div>
-                <h5>{{ user.username }}</h5>
-                <p>{{ user.bio }}</p>
-                <p>{{ user.url }}</p>
+                </fieldset>
             </div>
             <div class="col-md-2"></div>
         </div>
-        <!-- Row End -->
-        <!-- Left sidebar END -->
-
+        <br><br><hr>
+        <h4 class="text-center">Posts</h4>
+        <div class="card-columns" style="margin-left: 5%;">
+        {% for post in posts %}
+        <div class="d-flex">
+            <div class="user-image">
+                <img class="rounded-circle article-image" src="{{request.user.profile.image.url}}" alt="" width="66"
+                    height="66">
+            </div>
+            <h2 class="ml-3 pt-2">
+                <small><strong>{{post.user}}</strong></small>
+            </h2>
+        </div><br>
+        <div class="media-body">
+            <img src="{{user.post.picture.url}}" class="img-thumbnail" alt="Image" onclick="window.open(this.src)">
+            <div class="d-flex">
+                <div class="like-button">
+                    <a href="#"><img src="{% static 'images/like.png' %}" alt="" width="30"></a>
+                </div>
+                <div class="like-count">
+                    <p>{{post.likes.count}}</p>
+                </div>
+                <div class="comment-button">
+                    <a href="#"><img src="{% static 'images/comment.png' %}" alt="" width="30"></a>
+                </div>
+                <div class="comment-count">
+                    <p>{{post.comments.count}}</p>
+                </div>
+            </div>
+        </div>
+        {% for comment in post.comments %}
+        <div class="media">
+            <div class="media-image">
+                <img class="rounded-circle article-image" src="{{ comment.user.profile.image}}" alt="" width="66"
+                    height="66">
+            </div>
+            <div class="media-body">
+                <p>{{comment.text}}</p>
+            </div>
+        </div>
+        <p>{{post.caption}}</p>
+        {% endfor %}
+        <small class="text-muted">{{ post.created_at|date:"F j, Y" }}</small>
+        {% endfor %}
     </div>
+</div>
 </section>
+<br><br><br><br><br><br><br><br><br>
 {% endblock content %}
