@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+<article class="media content-section card col-md-4">
+    <div class="d-flex">
+        <div class="user-image">
+            <img class="rounded-circle article-image" src="{{ object.user.profile.image}}" alt="" width="66" height="66">
+        </div>
+        <div class="article-metadata">
+            <a class="mr-2" href="#">{{object.username }}</a>
+        </div>
+    </div>
+    <div class="media-body">
+        <img src="{{object.picture.image}}" alt="" width="100">
+        <div class="d-flex">
+            <div class="like-button">
+                <a href="{% url 'like' post.id %}"><img src="{% static 'images/like.png' %}" alt="" width="30"></a>
+            </div>
+            <div class="like-count">
+                <p>{{object.likes.count}}</p>
+            </div>
+            <div class="comment-button">
+                <a href="{% url 'comment' post.id %}"><img src="{% static 'images/comment.png' %}" alt="" width="30"></a>
+            </div>
+            <div class="comment-count">
+                <p>{{object.comments.count}}</p>
+            </div>
+        </div>
+        {% for comment in post.comments %}
+        <div class="media">
+            <div class="media-image">
+                <img class="rounded-circle article-image" src="{{ comment.user.profile.image}}" alt="" width="66" height="66">
+            </div>
+            <div class="media-body">
+                <p>{{comment.text}}</p>
+            </div>
+        </div>
+        <p>{{object.caption}}</p>
+        {% endfor %}
+    </div>
+    <small class="text-muted">{{ object.created_at|date:"F j, Y" }}</small>
+</article>
+{% endblock content %}
