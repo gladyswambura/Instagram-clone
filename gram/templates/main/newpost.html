@@ -1,0 +1,29 @@
+ {% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %} 
+<div class="container m-8">
+ <div class="row">
+         <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <h2 class="text-center">Create A New Post</h2>
+            <hr>
+             <form method="POST" enctype="multipart/form-data" class="mb-5">
+                 {% csrf_token %}
+                 <div class="form-group mb-3">
+                     <label for="file">Select image file</label>
+                     <input type="file" class="form-control input-lg shadow-none" name="photo" required />
+                 </div>
+                 <div class="form-group mb-3">
+                     <label for="">Caption</label>
+                     <input type="" class="form-control input-lg shadow-none" name="description" required />
+                 </div>
+                 <input type="submit" class="btn btn-info btn-md" value="POST">
+             </form>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+</div
+{{ form.media }}
+{% endblock %}
