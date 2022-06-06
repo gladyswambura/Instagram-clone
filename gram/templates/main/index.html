@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/6.1.1/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+<!-- *****************STORY SECTION**************** -->
+<section class="content container">
+    <div class="d-flex">
+        <div class="col-md-6">
+            <div class="card stories">
+                <div class="card-body">
+                    <button class="story">
+                        <div class="story__avatar">
+                            <svg class="rounded-circle account-img" src="{{request.user.profile.image.url}}" width="64"
+                                height="64" xmlns="#" style="object-fit: cover;">
+                                <circle r="31" cy="32" cx="32" />
+                            </svg>
+                        </div>
+                        <span class="story__user">@{{request.user.username}}</span>
+                    </button>
+                    <button class="story">
+                        <div class="story__avatar">
+                            <svg src="#" width="64" height="64" xmlns="#" style="object-fit: cover;">
+                                <circle r="31" cy="32" cx="32" />
+                            </svg>
+                        </div>
+                        <span class="story__user">@wambura</span>
+                    </button>
+                    <button class="story">
+                        <div class="story__avatar">
+
+                            <svg src="#" width="64" height="64" xmlns="#" style="object-fit: cover;">
+                                <circle r="31" cy="32" cx="32" />
+                            </svg>
+                        </div>
+                        <span class="story__user">@wambura</span>
+                    </button>
+                    <button class="story">
+                        <div class="story__avatar">
+
+                            <svg src="#" width="64" height="64" xmlns="#" style="object-fit: cover;">
+                                <circle r="31" cy="32" cx="32" />
+                            </svg>
+                        </div>
+                        <span class="story__user">@wambura</span>
+                    </button>
+                </div>
+            </div>
+
+            <br>
+            <!-- **********************POST SECTION********************** -->
+            <article class="media content-section card" style="margin-left: 5%;">
+                {% for post in posts %}
+                <div class="d-flex">
+                    <div class="user-image">
+                        <img class="rounded-circle article-image" src="{{request.user.profile.image.url}}" alt=""
+                            width="66" height="66">
+                    </div>
+                    <h2 class="ml-3 pt-2">
+                        <small><strong>{{post.user}}</strong></small>
+                    </h2>
+                </div><br>
+                <div class="media-body">
+                    <a href="{% url 'post-detail' post.id %}"><img class="post_media" src="{{ post.picture.url }}"
+                            alt="Post" style="width: 700px; height: 348px; object-fit: cover;"></a>
+                    <div class="d-flex">
+                        <div class="like-button">
+                            <a href="#"><img src="{% static 'images/like.png' %}" alt="" width="30"></a>
+                        </div>
+                        <div class="like-count">
+                            <p>{{post.likes.count}}</p>
+                        </div>
+                        <div class="comment-button">
+                            <a href="#"><img src="{% static 'images/comment.png' %}" alt="" width="30"></a>
+                        </div>
+                        <div class="comment-count">
+                            <p>{{post.comments.count}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% for comment in post.comments %}
+                <div class="media">
+                    <div class="media-image">
+                        <img class="rounded-circle article-image" src="{{ comment.user.profile.image}}" alt=""
+                            width="66" height="66">
+                    </div>
+                    <div class="media-body">
+                        <p>{{comment.text}}</p>
+                    </div>
+                </div>
+                <div class="post__description">
+                    <span>
+                        <a class="post__name--underline" href="#"><b>@{{post.user.username}}</b></a>
+                        {{post.caption}}
+
+                    </span>
+                </div>
+                {% endfor %}
+                <small class="text-muted">{{ post.posted|date:"F j, Y" }}</small>
+                {% endfor %}
+            </article>
+        </div>
+
+    <!-- **********SIDE MENU********* -->
+    <div class="col-md-6">
+        <div class="sidebar-right">
+            <div class="sidebar sidebar-sticky" style="padding: 0 40px;">
+                <div class="d-flex">
+                    <div class="user-image">
+                        <a href="#" target="_blank" class="side-menu__user-avatar">
+                            <img class="rounded-circle account-img" src="{{ request.user.profile.image.url }}"
+                                alt="course image" height="100" width="100">
+                        </a>
+                    </div>
+                    <div class="username ml-3 pt-4">
+                        <span>{{user.username}}</span><br>
+                        <span class="text-secondary">{{user.username}}</span>
+                    </div>
+                    <div class="switch  pt-4" style="margin-left:170px;">
+                        <small><a class="side-menu__user-button">switch</a></small>
+                    </div>
+                </div>
+                <br>
+                <div class="d-flex justify-content-around">
+                    <div class="side-menu__suggestions-header">
+                        <h6 class="text-secondary">Suggestions for You</h6>
+                    </div>
+                    <div class="see_all">
+                        <small><a class="user-button">see all</a></small>
+                    </div>
+                </div>
+
+                <div class="side-menu__suggestions-content">
+                    {% for user in users %}
+                    {% if request.user.username != user.username %}
+                    <div class="side-menu__suggestion">
+                        <a href="{% url 'profile' user %}" target="_blank" class="side-menu__user-avatar">
+                            <img class="rounded-circle account-img" src="{{ request.user.profile.image.url }}"
+                                alt="course image" height="100" width="100">
+                        </a>
+                        <a href="{% url 'profile' user %}" class="side-menu__suggestion-avatar">
+                            <img src="{{user.profile.image.url}}" alt="User Picture">
+                        </a>
+
+                        <div class="side-menu__suggestion-info">
+                            {% if user.profile.first_name %}
+                            <a href="{% url 'profile' user %}">{{user.profile.first_name|title}}
+                                {{user.profile.last_name|title}}</a>
+                            {% else %}
+                            <a href="{% url 'profile' user %}">{{user.username}}</a>
+                            {% endif %}
+                            <span>@{{user.username}}</span>
+                        </div>
+
+                        {% if follow_status == True %}
+                        <a href="{% url 'follow' user 0 %}" class="side-menu__suggestion-button">Follow</a>
+                        {% else %}
+                        <a href="{% url 'follow' user 1 %}" class="side-menu__suggestion-button">Follow</a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+    </div>
+
+    {% endblock content %}
