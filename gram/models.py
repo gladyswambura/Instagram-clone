@@ -1,13 +1,13 @@
 from django.db import models
 from  tinymce.models import HTMLField
 import datetime as dt
-from django.db.models.signals import post_save, post_delete
+# from django.db.models.signals import post_save, post_delete
 from django.contrib.auth.models import User         # for profile model
 
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="profile_picture", null=True, default="default.jpg")
+    image = models.ImageField(upload_to="profile_picture", default="default.jpg")
     first_name = models.CharField(max_length=200, null=True, blank=True)
     last_name = models.CharField(max_length=200, null=True, blank=True)
     bio = models.CharField(max_length=200, null=True, blank=True)
@@ -29,8 +29,8 @@ class Profile(models.Model):
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
 
-    post_save.connect(create_user_profile, sender=User)
-    post_save.connect(save_user_profile, sender=User)
+    # post_save.connect(create_user_profile, sender=User)
+    # post_save.connect(save_user_profile, sender=User)
 
     @property
     def saved_followers(self):
@@ -59,16 +59,27 @@ class Profile(models.Model):
 
 class Post(models.Model):
     picture = models.ImageField(upload_to="user_directory_path", verbose_name="Picture")
-    caption = models.TextField(max_length=10000, verbose_name="Caption")
+    caption = models.TextField(max_length=1000, null=True )
     posted = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post_likes = models.IntegerField(default=0)
-    # tags = models.ManyToManyField(Tag, related_name="tags")
+    post_name = models.CharField(max_length=60, default="", blank=True)
 
-    
+    def save_picture(self):
+     self.save()
+
+    @classmethod
+    def display_posts(cls):
+        posts = cls.objects.all().order_by('-posted_at')
+        return posts
     # uploading user files to a specific directory
     def user_directory_path(instance, filename):
         return 'user_{0}/{1}'.format(instance.user.id, filename)
+
+    def delete_post(self):
+        self.delete()
+
+    def __str__(self):
+        return "%s post" % self.post_name
 
 class Likes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -123,13 +134,13 @@ class Stream(models.Model):
             stream.save()
 
 
-post_save.connect(Stream.add_post, sender=Post)
+# post_save.connect(Stream.add_post, sender=Post)
 
-post_save.connect(Likes.user_liked_post, sender=Likes)
-post_delete.connect(Likes.user_unliked_post, sender=Likes)
+# post_save.connect(Likes.user_liked_post, sender=Likes)
+# post_delete.connect(Likes.user_unliked_post, sender=Likes)
 
-post_save.connect(Follow.user_follow, sender=Follow)
-post_delete.connect(Follow.user_unfollow, sender=Follow)
+# post_save.connect(Follow.user_follow, sender=Follow)
+# post_delete.connect(Follow.user_unfollow, sender=Follow)
 
     
 class Comment(models.Model):
@@ -153,8 +164,8 @@ class Comment(models.Model):
         notify = Notification.objects.filter(post=post, sender=sender, user=post.user, notification_types=2)
         notify.delete()
 
-post_save.connect(Comment.user_comment_post, sender=Comment)
-post_delete.connect(Comment.user_delete_comment_post, sender=Comment)
+# post_save.connect(Comment.user_comment_post, sender=Comment)
+# post_delete.connect(Comment.user_delete_comment_post, sender=Comment)
 
 class Notification(models.Model):
     NOTIFICATION_TYPES = ((1, 'Like'), (2, 'Comment'), (3, 'Follow'))
