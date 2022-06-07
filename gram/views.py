@@ -11,18 +11,21 @@ from django.db.models import Q
 
 
 # SEARCH
-def search(request):
-    if request.method == 'GET':
-        query = request.GET.get('q')
-        if query:
-            results = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
-            return render(request, 'main/search.html', {'results': results})
-        else:
-            return render(request, 'main/search.html')
+@login_required(login_url='/accounts/login/')
+def search_results(request):
+    current_user = request.user
+    profile = Profile.get_profile()
+    if 'username' in request.GET and request.GET["username"]:
+        search_term = request.GET.get("username")
+        searched_name = Profile.find_profile(search_term)
+        message = search_term
+        return render(request,'main/search.html',{"message":message,
+                                             "profiles":profile,
+                                             "user":current_user,
+                                             "username":searched_name})
     else:
-        return render(request, 'main/search.html')
-
-
+        message = "You haven't searched for any user"
+        return render(request,'main/search.html',{"message":message})
 
 # MAIN PAGE VIEW
 @login_required(login_url='/accounts/login/')
@@ -69,6 +72,15 @@ def PostDetail(request, post_id):
 
     return render(request, 'post_detail.html', context)
 
+@login_required(login_url='/accounts/login/')
+def all(request, pk):
+    profile = Profile.objects.get(pk=pk)
+    images = Post.objects.all().filter(posted_by_id=pk)
+    content = {
+        "profile": profile,
+        'images': images,
+    }
+    return render(request, 'main/all.html', content)
 
 # LIKE POST FUNCTION
 @login_required(login_url='/accounts/login/')
@@ -92,7 +104,7 @@ def add_comment(request, pk):
         form = NewCommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.post = post
+            comment.image = post
             comment.user = current_user
             comment.save()
             return redirect('index')

@@ -19,10 +19,12 @@
             <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
                 <ul class="nav col-12 col-md-auto mb-2 mb-md-0">
                     <li class="nav-item me-3 py-2 justify-content-md-center ">
-                        <form class="form-inline" action=" #" method="GET" style="margin:auto;max-width:300px">
-                            <input type="search" width="20%" class="form-control mr-sm-2" placeholder=" &#xF002; Search"
-                                aria-label="Search" name="search_user" value="{{ request.GET.search }}">
-                            <div style="width:10% ;" class="input-group-btn btn-"></div>
+                      
+                        <form class="form-inline" role="search" action="{% url 'search_results' %}" method="get"
+                            style="margin:auto;max-width:300px">
+                            <input type="text" width="20%" class="form-control mr-sm-2" role="search"
+                                 placeholder=" &#xF002; Search"
+                                aria-label="Search" name="username">
                         </form>
                     </li>
                     {% if request.user.is_authenticated %}

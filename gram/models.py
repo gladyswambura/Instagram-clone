@@ -1,3 +1,4 @@
+import profile
 from django.db import models
 from  tinymce.models import HTMLField
 import datetime as dt
@@ -29,8 +30,15 @@ class Profile(models.Model):
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
 
-    # post_save.connect(create_user_profile, sender=User)
-    # post_save.connect(save_user_profile, sender=User)
+    @classmethod
+    def get_profile(cls):
+        profile = Profile.objects.all()
+        return profile
+
+    @classmethod
+    def find_profile(cls, search_term):
+        profile = Profile.objects.filter(user__username__icontains=search_term)
+        return profile
 
     @property
     def saved_followers(self):
@@ -143,9 +151,9 @@ class Stream(models.Model):
             stream.save()
     
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments", null=True)
+    image = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments", null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    comment = models.TextField(max_length=200, null=True)
+    comment = models.CharField(max_length=200, null=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
