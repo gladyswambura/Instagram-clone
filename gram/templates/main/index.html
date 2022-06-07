@@ -107,56 +107,34 @@
                     </div>
                 </div>
                 <br>
-                <div class="d-flex justify-content-around">
+                <div class="d-flex">
                     <div class="side-menu__suggestions-header">
                         <h6 class="text-secondary">Suggestions for You</h6>
                     </div>
-                    <div class="see_all">
+                    <div class="see_all ml-4"></div>
+                    <div class="see_all ml-5">
                         <small><a class="user-button">see all</a></small>
                     </div>
                 </div>
-                 <a href="/follow/follow/{{profile.user.id}}/"
-                     class="btn btn-outline-secondary btn-sm">{{follow}}follow</a>
-                 <a href="/follow/unfollow/{{profile.user.id}}/"
-                     class="btn btn-outline-secondary btn-sm">{{unfollow}}unfollow</a>
-
+                <br>
                 <div class="side-menu__suggestions-content">
                     {% for user in users %}
-
-                    <!-- {%for userone in users%}
-                    {% if userone != current_user%}
-                    <li class="followuser">
-                        <img src="{{userone.profile.profile_image.url}}" />
-                        <a class="username" href="{{userone.profile.profile_}}""">{{userone.username}}</a>
-                        <a href="{{user.profile}}">Follow</a>
-                    </li>
-                    {%endif%}
-                    {%endfor%} -->
-
                     {% if user != current_user %}
                     <div class="side-menu__suggestion">
-                        <a href="{% url 'profile' user %}" target="_blank" class="side-menu__user-avatar">
-                            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}"
-                                alt="course image" height="100" width="100">
-                        </a>
-                        <a href="{% url 'profile' user %}" class="side-menu__suggestion-avatar">
-                            <img src="{{user.profile.image.url}}" alt="User Picture">
-                        </a>
-                        <div class="side-menu__suggestion-info">
-                            {% if user.profile.first_name %}
-                            <a href="{% url 'profile' user %}">{{user.profile.first_name|title}}
-                                {{user.profile.last_name|title}}</a>
-                            {% else %}
-                            <a href="{% url 'profile' user %}">{{user.username}}</a>
-                            {% endif %}
-                            <span>@{{user.username}}</span>
-                        </div>
-
-                        {% if follow_status == True %}
-                        <a href="{% url 'follow' user 0 %}" class="side-menu__suggestion-button">Follow</a>
-                        {% else %}
-                        <a href="{% url 'follow' user 1 %}" class="side-menu__suggestion-button">Follow</a>
-                        {% endif %}
+                        <li class="followuser d-flex">
+                            <div class="image">
+                            <img class="rounded-circle account-img" src="{{user.profile.image.url}}" height="66"
+                                width="66" />
+                            </div>
+                            <div class="username ml-3 pt-2">
+                            <a class="username" href="{{userone.profile.profile_}}">{{user.username}}</a>
+                            </div>
+                            <div class="follow ml-5 pt-2"></div>
+                            <div class="follow ml-5 pt-2">
+                                <a href="/follow/follow/{{profile.user.id}}/">{{user.follow}}follow</a>
+                            <!-- <a href="{{user.profile}}">Follow</a> -->
+                            </div>
+                        </li><br>
                     </div>
                     {% endif %}
                     {% endfor %}
