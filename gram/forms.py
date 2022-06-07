@@ -46,7 +46,7 @@ class NewPostform(forms.ModelForm):
 
 # COMMENT
 class NewCommentForm(forms.ModelForm):
-    # body = forms.CharField(widget=forms.TextInput(attrs={'class': 'input', 'placeholder': 'Write comment'}), required=True)
+    # comment = forms.CharField(widget=forms.TextInput(attrs={'class': 'input', 'placeholder': 'Write comment'}), required=True)
     class Meta:
         model = Comment
         exclude = ['post', 'user', 'date']
