@@ -63,9 +63,18 @@ class Post(models.Model):
     posted = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post_name = models.CharField(max_length=60, default="", blank=True)
+    likes = models.PositiveIntegerField(default=0)
 
     def save_picture(self):
      self.save()
+
+    @classmethod
+    def get_posts(cls):
+        posts =Post.objects.all()
+        return posts
+
+    def __str__(self):
+       return str(self.caption)
 
     @classmethod
     def display_posts(cls):
@@ -81,23 +90,23 @@ class Post(models.Model):
     def __str__(self):
         return "%s post" % self.post_name
 
-class Likes(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post_likes = models.ForeignKey(Post, on_delete=models.CASCADE)
+# class Likes(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     post_likes = models.ForeignKey(Post, on_delete=models.CASCADE)
 
-    def user_liked_post(sender, instance, *args, **kwargs):
-        post_likes = instance
-        post =  post_likes.post
-        sender =  post_likes.user
-        notify = Notification(post=post, sender=sender, user=post.user)
-        notify.save()
+#     def user_liked_post(sender, instance, *args, **kwargs):
+#         post_likes = instance
+#         post =  post_likes.post
+#         sender =  post_likes.user
+#         notify = Notification(post=post, sender=sender, user=post.user)
+#         notify.save()
 
-    def user_unliked_post(sender, instance, *args, **kwargs):
-        post_likes = instance
-        post =  post_likes.post
-        sender =  post_likes.user
-        notify = Notification.objects.filter(post=post, sender=sender, notification_types=1)
-        notify.delete()
+#     def user_unliked_post(sender, instance, *args, **kwargs):
+#         post_likes = instance
+#         post =  post_likes.post
+#         sender =  post_likes.user
+#         notify = Notification.objects.filter(post=post, sender=sender, notification_types=1)
+#         notify.delete()
 
 
 class Follow(models.Model):
@@ -132,40 +141,23 @@ class Stream(models.Model):
         for follower in followers:
             stream = Stream(post=post, user=follower.follower, date=post.posted, following=user)
             stream.save()
-
-
-# post_save.connect(Stream.add_post, sender=Post)
-
-# post_save.connect(Likes.user_liked_post, sender=Likes)
-# post_delete.connect(Likes.user_unliked_post, sender=Likes)
-
-# post_save.connect(Follow.user_follow, sender=Follow)
-# post_delete.connect(Follow.user_unfollow, sender=Follow)
-
     
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comment")
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    body = models.TextField()
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments", null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    comment = models.TextField(max_length=200, null=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
 
-    def user_comment_post(sender, instance, *args, **kwargs):
-        comment = instance
-        post = comment.post
-        text_preview = comment.body[:90]
-        sender = comment.user
-        notify = Notification(post=post, sender=sender, user=post.user, text_preview=text_preview, notification_types=2)
-        notify.save()
+    def __str__(self):
+        return self.comment
 
-    def user_delete_comment_post(sender, instance, *args, **kwargs):
-        comment = instance
-        post = comment.post
-        sender = comment.user
-        notify = Notification.objects.filter(post=post, sender=sender, user=post.user, notification_types=2)
-        notify.delete()
+    def save_comment(self):
+        self.save()
 
-# post_save.connect(Comment.user_comment_post, sender=Comment)
-# post_delete.connect(Comment.user_delete_comment_post, sender=Comment)
+    @classmethod
+    def get_comment(cls):
+        comment = Comment.objects.all()
+        return comment
 
 class Notification(models.Model):
     NOTIFICATION_TYPES = ((1, 'Like'), (2, 'Comment'), (3, 'Follow'))
