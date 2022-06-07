@@ -1,21 +1,27 @@
 {%extends 'base.html'%}
 {% block content %}
-{{ block.super}}
-{% load bootstrap4 %}
-<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-<title>Comments</title>
-{{form.media}}
-<div class="card mx-auto" style="max-width:50rem; margin-top:50px;">
-      <form action="#" method="post" enctype="multipart/form-data">
-        {%csrf_token%}
-         {% for field in form %}
-         {% bootstrap_field field %}
-         {% endfor %}
-        <input type="submit" class="btn btn-success btn-lg" placeholder="comment here" value="Post">
-    </form>
+<div class="media content-section card" style="margin-left: 5%;">
+  {% for comment in comments %}
+  <div class="d-flex">
+    <div class="responsive" style=" width: 100%; height: auto;">
+      {{ comment.comment}}
+    </div>
+    <h5 class="ml-2 pt-3">
+      <small><strong>{{post.user}}</strong></small>
+    </h5>
+  </div>
+
+  {% endfor %}
 </div>
-{% block scripts %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-{% bootstrap_javascript %}
-{% endblock %}
+<form method="POST" action="" style="width:90%">
+  {% csrf_token %}
+  <div class="d-flex ">
+    <div class="input-group w-75">
+      <input type="text" name="comment" class="w-100" placeholder="Add a comment">
+    </div>
+    <div class="input-group w-25">
+      <button class="btn btn-light ms-auto text-secondary">Post</button>
+    </div>
+  </div>
+</form>
 {% endblock %}

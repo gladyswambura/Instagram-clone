@@ -72,6 +72,7 @@ class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post_name = models.CharField(max_length=60, default="", blank=True)
     likes = models.PositiveIntegerField(default=0)
+    
 
     def save_picture(self):
      self.save()
@@ -97,25 +98,6 @@ class Post(models.Model):
 
     def __str__(self):
         return "%s post" % self.post_name
-
-# class Likes(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     post_likes = models.ForeignKey(Post, on_delete=models.CASCADE)
-
-#     def user_liked_post(sender, instance, *args, **kwargs):
-#         post_likes = instance
-#         post =  post_likes.post
-#         sender =  post_likes.user
-#         notify = Notification(post=post, sender=sender, user=post.user)
-#         notify.save()
-
-#     def user_unliked_post(sender, instance, *args, **kwargs):
-#         post_likes = instance
-#         post =  post_likes.post
-#         sender =  post_likes.user
-#         notify = Notification.objects.filter(post=post, sender=sender, notification_types=1)
-#         notify.delete()
-
 
 class Follow(models.Model):
     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')

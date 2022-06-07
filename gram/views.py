@@ -94,25 +94,8 @@ def like(request,operation,pk):
         post.likes -= 1
         post.save()
     return redirect('index')
-    
 
-@login_required(login_url='/accounts/login/')
-def add_comment(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    current_user = request.user
-    if request.method == 'POST':
-        form = NewCommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.image = post
-            comment.user = current_user
-            comment.save()
-            return redirect('index')
-    else:
-        form = NewCommentForm()
-        return render(request, 'main/comment.html', {"user": current_user, "comment_form": form})
 
-# FAVOURITE POST FUNCTION
 @login_required(login_url='/accounts/login/')
 def favourite(request, post_id):
     user = request.user
@@ -181,20 +164,34 @@ def follow(request,operation,id):
         Follow.unfollow(request.user,current_user)
         return redirect('index')
 
-# def follow(request, username, option):
-#     follower = request.user
-#     following = get_object_or_404(User, username=username)
-
-#     try:
-#         f, created = Follow.objects.get_or_create(follower=request.user, following=following)
-
-#         if int(option) == 0:
-#             f.delete()
-#             Stream.objects.filter(following=following, user=request.user).all().delete()
-
-#         return HttpResponseRedirect(reverse('profile', args=[username]))
-
-#     except User.DoesNotExist:
-#         return HttpResponseRedirect(reverse('profile', args=[username]))
 
 
+def addComment(request):                       
+    comments = Comment.objects.all()           
+    if request.method=='POST':
+        comment=request.POST.get('comment')
+    
+        com=Comment.objects.create(comment=comment)
+        com.save()
+    return render(request, 'main/index.html', {'comments':comments})
+   
+
+def comment(request):
+    comments = Comment.objects.all()
+    if request.method=='POST':
+        comment=request.POST.get('comment')
+    
+        com=Comment.objects.create(comment=comment)
+        com.save()
+    return render(request, 'main/comment.html', {'comments':comments})
+
+
+#  if request.method=='POST':
+#         comment=request.POST.get('comment')
+#         com.save()
+#         img=Post.objects.get(id=image_id)
+#         com=Comment.objects.create(img=img,comment=comment)
+#         print('comment',comment)
+#         newcomment = Comment.objects.all()
+#         print(newcomment)
+#     return render(request, 'index')

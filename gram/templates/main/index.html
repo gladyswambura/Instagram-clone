@@ -10,13 +10,13 @@
 <!-- *****************STORY SECTION**************** -->
 <section class="content container">
     <div class="pt-1"></div>
-    <div class="d-flex">
-        <div class="col-md-6">
+    <div class="row row-cols-lg-3 rows-cols-2 logo-grid">
+        <div class="col-md-6 col-sm-6 col-lg-6">
             <!-- **********************POST SECTION********************** -->
             <div class="media content-section card" style="margin-left: 5%;">
                 {% for post in posts %}
                 <div class="d-flex">
-                    <div class="user-image ml-2 mt-2">
+                    <div class="responsive" style=" width: 100%; height: auto;">
                         <img class="rounded-circle article-image" src="{{post.user.profile.image.url}}" alt=""
                             width="45" height="45">
                     </div>
@@ -25,9 +25,9 @@
                     </h5>
                 </div>
                 <p></p>
-                <div class="media-body">
-                    <a href="{% url 'post-detail' post.id %}"><img class="image-responsive" src="{{ post.picture.url }}"
-                            alt="Post" style="width: 500px; height: 348px; object-fit: cover;"></a>
+                <div class="img-responsive">
+                    <img class="image-responsive" src="{{ post.picture.url }}"
+                            alt="Post" style="width: 100%; height: 348px; object-fit: cover;">
                     <p></p>
                     <div class="d-flex">
                         <div class="like-button ml-3">
@@ -49,34 +49,32 @@
                         <label class="ml-3">Liked by: {{post.likes}}</label>
                         {% endif %}
                         <p><strong class="ml-3">{{post.user}} </strong>{{post.caption}}</p>
-                        {% for comment in comments %}
-                        {% if image.id == comment.image.id %}
-                        <p><strong>{{comment.user}}</strong> {{comment.comment}}</p>
-                        {% endif %}
-                        {%endfor%}
-                        {{form.media}}
-                        <form action="#" method="post" enctype="multipart/form-data"
-                            id="comment">
-                            {%csrf_token%}
-                            {% for field in form %}
-                            {% bootstrap_field field %}
-                            {% endfor %}
-                        </form>
+                    </div>
+                    </div>
+
                         {% block scripts %}
                         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
                         {% bootstrap_javascript %}
                         {% endblock %}
-                    </div>
-                    <!-- <div class="media-body ml-3 pt-3">
-                        <p>Liked by: <p>{{post.like.count}}</p>{{post.likes}}</p>
-                    </div> -->
-                </div>
-                <small class="text-muted ml-3">{{ post.posted|timesince}} ago</small>
+                    
+                    {% for comment in comments %}
+                    {{comment.comment}}
+                    {{ post.comment.comment}}
+                    {% endfor %}
+
+                <small class="text-muted ml-3">{{ post.posted|timesince }} ago</small>
                 <p></p>
-                <form action="{%url 'comment' pk=post.id %}" class="form-group ml-1 p-8 d-flex">
-                    <input type="text" class="form-control pl-5 pr-5" placeholder="Add a comment">
-                    <span><button class="btn btn-info" value="comment">Post</button></span>
-                    <hr>
+                
+                <form method="POST" action="" style="width:90%">
+                    {% csrf_token %}
+                    <div class="d-flex ">
+                        <div class="input-group w-75">
+                            <input type="text" name="addcomment" class="w-100" placeholder="Add a comment">
+                        </div>
+                        <div class="input-group w-25">
+                            <button class="btn btn-light ms-auto text-secondary">Post</button>
+                        </div>
+                    </div>
                 </form>
                 <hr>
                 {% endfor %}
@@ -84,22 +82,23 @@
             <p></p><br>
         </div>
 
+
     <!-- **********SIDE MENU********* -->
-    <div class="col-md-6 pt-5">
+    <div class="col-md-6 col-sm-6 col-lg-6">
         <div class="sidebar-right">
             <div class="pt-4"></div>
-            <div class="sidebar sidebar-sticky" style="padding: 5 40px;margin-top: 6%; position: fixed;">
+            <div class="sidebar sidebar-sticky" style="padding: 5 40px;margin-top: 10%; position: fixed;">
                 <div class="d-flex">
                     <div class="d-flex">
                         <div class="user-image ml-2">
                             <img class="rounded-circle article-image" src="{{request.user.profile.image.url}}" alt=""
                                 width="48" height="48">
                         </div>
-                        <h5 class="ml-2 pt-2">
+                        <h5 class="user ml-2 pt-2">
                             <small><strong>{{post.user}}</strong></small>
                         </h5>
                     </div>
-                    <div class="username ml-3 pt-2">
+                    <div class="username ml-3 pt-2" style="color: black;text-decoration: none;">
                         <span>{{user.username}}</span><br>
                         <span class="text-secondary">{{user.username}}</span>
                     </div>
@@ -116,7 +115,7 @@
                     </div>
                     <div class="see_all ml-4"></div>
                     <div class="see_all ml-5">
-                        <small><a class="user-button">see all</a></small>
+                        <small><a class="user-button" style="color: black;text-decoration: none;">see all</a></small>
                     </div>
                 </div>
                 <br>
@@ -131,11 +130,12 @@
                             </div>
                             <div class="username ml-3 pt-2" >
                                 
-                            <a class="username" href="{{user.profile.all_}}">{{user.username}}</a>
+                            <a class="username" style="color: black;text-decoration: none;"
+                                href="{{user.profile.all_}}">{{user.username}}</a>
                             </div>
                             <div class="follow ml-5 pt-2"></div>
                             <div class="follow ml-5 pt-2">
-                                <a href="/follow/follow/{{profile.user.id}}/">{{user.follow}}follow</a>
+                                <a style="color: black;text-decoration: none;" href="/follow/follow/{{profile.user.id}}/">{{user.follow}}follow</a>
                             <!-- <a href="{{user.profile}}">Follow</a> -->
                             </div>
                         </li><br>
@@ -147,6 +147,26 @@
         </div>
 
     </div>
+    <style>
+        .sidebar {
+        position: relative;
+        height: 400px;
+        width: 320px;
+        float: right;
+        overflow: hidden;
+        min-height: 600px;
+        }
+        .sidebar h5 .user {
+        color: black;
+        text-decoration: none;
+        }
+        @media only screen and (max-width: 768px) {
+        .sidebar {
+        display: none;
+        }
+        }
+    </style>
+    
     </div>
     </div>
 

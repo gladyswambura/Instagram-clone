@@ -35,3 +35,15 @@ p .has-separator:after {
     position: sticky;
     top: 0;
 }
+@media only screen and (max-width: 600px) {
+    div.col {
+        display: none;
+        ;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .stories {
+        display: none;
+    }
+}

@@ -11,7 +11,6 @@ urlpatterns = [
     path('profile/',views.profile,name='profile'),
     path('profile/update/',app_views.update_profile,name='update_profile'),
     re_path(r'^new/profile$', views.add_profile, name='new_profile'),
-    # path('new/profile',app_views.add_profile,name='new_profile'),
 
     # MAIN PAGE && POST SECTION
     path('', views.index, name='index'),
@@ -19,9 +18,10 @@ urlpatterns = [
     path('post/<int:pk>/', views.PostDetail, name='post-detail'),
     re_path(r'^like/(?P<operation>.+)/(?P<pk>\d+)/',views.like, name='like'),
     re_path(r'^all/(?P<pk>\d+)', views.all, name='all'),
-    path('comment/<int:pk>/', views.add_comment, name='comment'),
-    # re_path(r'^comment/(?P<pk>\d+)',views.add_comment, name='comment'),
+    path('addcomment//',views.addComment,name='addcomment'),
+    # path('comment/', views.new_comment, name='comment'),
     re_path(r'^search/', views.search_results, name='search_results'),
+    path('comment/', views.comment, name='comment')
 ]
 
 if settings.DEBUG:

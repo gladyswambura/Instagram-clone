@@ -1,6 +1,7 @@
 from django import forms
 from .models import Profile, Post, Comment
 from django.contrib.auth.models import User
+from django.forms import ModelForm
 
 # PROFILE
 class UpdateProfileForm(forms.ModelForm):
@@ -31,7 +32,6 @@ class NewPostform(forms.ModelForm):
 
 # COMMENT
 class NewCommentForm(forms.ModelForm):
-    # comment = forms.CharField(widget=forms.TextInput(attrs={'class': 'input', 'placeholder': 'Write comment'}), required=True)
-    class Meta:
-        model = Comment
-        exclude = ['post', 'user', 'date']
+  class Meta:
+    model = Comment
+    fields = "__all__"

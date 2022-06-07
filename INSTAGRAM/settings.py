@@ -73,7 +73,10 @@ INSTALLED_APPS = [
     'bootstrap4',
     'gram',
     'tinymce',
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'uni_form'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
