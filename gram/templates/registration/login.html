@@ -30,7 +30,7 @@
                     </div>
                     <div class="l-part">
                         <br>
-                        <form style="margin:20px;" action="" method="POST">{% csrf_token %}
+                        <form style="margin:20px;" action="/accounts/login/" method="POST">{% csrf_token %}
                             {% bootstrap_form form%}
                             <button class="form-btn btn-info btn-md" style="padding-left:130px;padding-right:130px; margin:20px;"
                                 type="submit">Log in</button>
@@ -51,7 +51,7 @@
                 <div class="card">
                     <div class="r-part">
                         <div class="sign-up" style="padding:5%;">
-                            <span style="margin-left: 50px;">Don't have an account?<a href="#">Sign up</a></span>
+                            <span style="margin-left: 50px;">Don't have an account?<a href="/accounts/register">Sign up</a></span>
                         </div>
                     </div>
                 </div>
