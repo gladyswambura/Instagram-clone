@@ -1,105 +1,49 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404,HttpResponseRedirect
 from django.urls import reverse, resolve
-from .forms import UserRegisterForm
 from django.contrib import messages
-from . forms import UpdateProfileForm, UpdateUserForm, NewPostform, NewCommentForm
+from . forms import *
 from django.contrib.auth.decorators import login_required
-from .models import Post, Profile, Follow, Stream, Likes, Comment
-from django.http import JsonResponse
+from .models import Post, Profile, Follow, Stream, Comment
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db.models import Q
 
-# AUTHENTICATION--(Signup)
-def register(request):
-    if request.method == "POST":
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            new_user = form.save()
-            username = form.cleaned_data.get('username')
-            email = form.cleaned_data.get['email']
-            messages.success(request, f'Hurray your account was created!!')
 
-            # Automatically Log In The User
-            new_user = authenticate(username=form.cleaned_data['username'],
-                                    password=form.cleaned_data['password1'],)
-            login(request, new_user)
-            # return redirect('editprofile')
-            return redirect('index')
-
-    elif request.user.is_authenticated:
-        return redirect('login')
+# SEARCH
+def search(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        if query:
+            results = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
+            return render(request, 'main/search.html', {'results': results})
+        else:
+            return render(request, 'main/search.html')
     else:
-        form = UserRegisterForm()
-    context = {
-        'form': form,
-    }
-    return render(request, 'sign-up.html', context)
+        return render(request, 'main/search.html')
+
 
 
 # MAIN PAGE VIEW
+@login_required(login_url='/accounts/login/')
 def index(request):
-    user = request.user
-    user = request.user
-    all_users = User.objects.all()
-    # follow_status = Follow.get_or_create.filter(following=user, follower=request.user).exists()
+    posts = Post.objects.all().order_by('-posted')
+    return render(request, 'main/index.html',{'posts':posts})
 
-    profile = Profile.objects.all()
-
-    posts = Stream.objects.filter(user=user)
-    group_ids = []
-
-    
-    for post in posts:
-        group_ids.append(post.post_id)
-        
-    post_items = Post.objects.filter(id__in=group_ids).all().order_by('-posted')
-
-    query = request.GET.get('q')
-    if query:
-        users = User.objects.filter(Q(username__icontains=query))
-
-        page_number = request.GET.get('page')
-
-    context = {
-        'post_items': post_items,
-        'profile': profile,
-        'all_users': all_users,
-    }
-    return render(request, 'gram/index.html', context)
 
 # NEW POST FUNCTION
-@login_required
+@login_required(login_url='/accounts/login/')
 def NewPost(request):
-    user = request.user
-    profile = get_object_or_404(Profile, user=user)
-    tags_obj = []
-    
-    if request.method == "POST":
-        form = NewPostform(request.POST, request.FILES)
-        if form.is_valid():
-            picture = form.cleaned_data.get('picture')
-            caption = form.cleaned_data.get('caption')
-            tag_form = form.cleaned_data.get('tags')
-            tag_list = list(tag_form.split(','))
-
-            for tag in tag_list:
-                t, created = tag.objects.get_or_create(title=tag)
-                tags_obj.append(t)
-            p, created = Post.objects.get_or_create(picture=picture, caption=caption, user=user)
-            p.tags.set(tags_obj)
-            p.save()
-            return redirect('profile', request.user.username)
-    else:
-        form = NewPostform()
-    context = {
-        'form': form
-    }
-    return render(request, 'newpost.html', context)
+    if request.method=='POST':
+        picture=request.FILES.get('photo')
+        caption=request.POST.get('caption')
+        img=Post(picture=picture,caption=caption,user=request.user)
+        img.save_picture()
+        return redirect('index')
+    return render(request,'main/newpost.html')
 
 # POST-DETAILS FUNCTION
-@login_required
+@login_required(login_url='/accounts/login/')
 def PostDetail(request, post_id):
     user = request.user
     post = get_object_or_404(Post, id=post_id)
@@ -112,7 +56,7 @@ def PostDetail(request, post_id):
             comment.post = post
             comment.user = user
             comment.save()
-            return HttpResponseRedirect(reverse('post-details', args=[post.id]))
+            return HttpResponseRedirect(reverse('post-detail', args=[post.id]))
     else:
         form = NewCommentForm()
 
@@ -122,31 +66,41 @@ def PostDetail(request, post_id):
         'comments': comments
     }
 
-    return render(request, 'postdetail.html', context)
+    return render(request, 'post_detail.html', context)
 
 
 # LIKE POST FUNCTION
-@login_required
-def like(request, post_id):
-    user = request.user
-    post = Post.objects.get(id=post_id)
-    current_likes = post.likes
-    liked = Likes.objects.filter(user=user, post=post).count()
+@login_required(login_url='/accounts/login/')
+def like(request,operation,pk):
+    post = get_object_or_404(Post,pk=pk)
+    
+    if operation == 'like':
+        post.likes += 1
+        post.save()
+    elif operation =='unlike':
+        post.likes -= 1
+        post.save()
+    return redirect('index')
+    
 
-    if not liked:
-        Likes.objects.create(user=user, post=post)
-        current_likes = current_likes + 1
+@login_required(login_url='/accounts/login/')
+def add_comment(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    current_user = request.user
+    if request.method == 'POST':
+        form = NewCommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = current_user
+            comment.save()
+            return redirect('index')
     else:
-        Likes.objects.filter(user=user, post=post).delete()
-        current_likes = current_likes - 1
-        
-    post.likes = current_likes
-    post.save()
-    # return HttpResponseRedirect(reverse('post-details', args=[post_id]))
-    return HttpResponseRedirect(reverse('post-details', args=[post_id]))
+        form = NewCommentForm()
+        return render(request, 'main/comment.html', {"user": current_user, "comment_form": form})
 
 # FAVOURITE POST FUNCTION
-@login_required
+@login_required(login_url='/accounts/login/')
 def favourite(request, post_id):
     user = request.user
     post = Post.objects.get(id=post_id)
@@ -156,21 +110,63 @@ def favourite(request, post_id):
         profile.favourite.remove(post)
     else:
         profile.favourite.add(post)
-    return HttpResponseRedirect(reverse('post-details', args=[post_id]))
+    return HttpResponseRedirect(reverse('post-detail', args=[post_id]))
 
 
 # **********Profile view starts here******************
 # PROFILE FUNCTION
-@login_required
+@login_required(login_url='/accounts/login/')
 def profile(request):
     userupdate = UpdateUserForm()
-    profileupdate = UpdateProfileForm()
-
     context = {
         'userupdate': userupdate,
-        'profileupdate': profileupdate
     }
     return render(request, 'users/profile.html', context)
 
+# UPDATE PROFILE FUNCTION
+@login_required(login_url='/accounts/login/')
+def update_profile(request):
+    current_user = request.user
+    if request.method == 'POST':
+        updateprofile = UpdateProfileForm(request.POST,request.FILES)
+        if updateprofile.is_valid():
+            profile = updateprofile.save(commit=False)
+            profile.user = current_user
+            profile.save()
+        
+        messages.success(request,'Your Profile account has been updated successfully')
+        return redirect('index')
+    else:
+        updateprofile = NewProfileForm() 
+    params = {
+        'updateprofile':updateprofile
+    }
+    return render(request,'users/update_profile.html',params)
+
+# FOLLOW
+def follow(request,operation,id):
+    current_user=User.objects.get(id=id)
+    if operation=='follow':
+        Follow.follow(request.user,current_user)
+        return redirect('index')
+    elif operation=='unfollow':
+        Follow.unfollow(request.user,current_user)
+        return redirect('index')
+
+# def follow(request, username, option):
+#     follower = request.user
+#     following = get_object_or_404(User, username=username)
+
+#     try:
+#         f, created = Follow.objects.get_or_create(follower=request.user, following=following)
+
+#         if int(option) == 0:
+#             f.delete()
+#             Stream.objects.filter(following=following, user=request.user).all().delete()
+
+#         return HttpResponseRedirect(reverse('profile', args=[username]))
+
+#     except User.DoesNotExist:
+#         return HttpResponseRedirect(reverse('profile', args=[username]))
 
 
