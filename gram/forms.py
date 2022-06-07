@@ -9,9 +9,9 @@ class UpdateProfileForm(forms.ModelForm):
     fields = ['image','bio']
 
 class NewProfileForm(forms.ModelForm):
-  class Meta:
-    model = Profile
-    fields = ['image','bio']
+    class Meta:
+      model = Profile
+      exclude = ['user']  # exclude the user field
 
 # UPDATE USER
 class UpdateUserForm(forms.ModelForm):

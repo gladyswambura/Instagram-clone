@@ -9,6 +9,7 @@
 
 <!-- *****************STORY SECTION**************** -->
 <section class="content container">
+    <div class="pt-1"></div>
     <div class="d-flex">
         <div class="col-md-6">
             <!-- **********************POST SECTION********************** -->
@@ -84,9 +85,10 @@
         </div>
 
     <!-- **********SIDE MENU********* -->
-    <div class="col-md-6">
+    <div class="col-md-6 pt-5">
         <div class="sidebar-right">
-            <div class="sidebar sidebar-sticky" style="padding: 0 40px;">
+            <div class="pt-4"></div>
+            <div class="sidebar sidebar-sticky" style="padding: 5 40px;margin-top: 6%; position: fixed;">
                 <div class="d-flex">
                     <div class="d-flex">
                         <div class="user-image ml-2">
@@ -102,9 +104,10 @@
                         <span class="text-secondary">{{user.username}}</span>
                     </div>
                      <div class="form-group ml-3 pt-2">
-                         <a href="{% url 'update_profile' %}"><button class="form-btn btn-md" type="submit"
-                                 value="Update">Edit Profile</button></a>
+                         <a href="{% url 'new_profile' %}"><button class="form-btn btn-md" type="submit"
+                                 value="Update">Add Profile</button></a>
                     </div>
+
                 </div>
                 <br>
                 <div class="d-flex">
@@ -126,8 +129,9 @@
                             <img class="rounded-circle account-img" src="{{user.profile.image.url}}" height="66"
                                 width="66" />
                             </div>
-                            <div class="username ml-3 pt-2">
-                            <a class="username" href="{{userone.profile.profile_}}">{{user.username}}</a>
+                            <div class="username ml-3 pt-2" >
+                                
+                            <a class="username" href="{{user.profile.all_}}">{{user.username}}</a>
                             </div>
                             <div class="follow ml-5 pt-2"></div>
                             <div class="follow ml-5 pt-2">

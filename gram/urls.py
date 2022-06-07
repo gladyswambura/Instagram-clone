@@ -10,6 +10,9 @@ urlpatterns = [
     # PROFILE SECTION
     path('profile/',views.profile,name='profile'),
     path('profile/update/',app_views.update_profile,name='update_profile'),
+    re_path(r'^new/profile$', views.add_profile, name='new_profile'),
+    # path('new/profile',app_views.add_profile,name='new_profile'),
+
     # MAIN PAGE && POST SECTION
     path('', views.index, name='index'),
     path('newpost', app_views.NewPost, name='newpost'),
