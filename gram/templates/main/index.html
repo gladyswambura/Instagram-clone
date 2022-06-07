@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load bootstrap4 %}
 {% load static %}
 {% block content %}
 <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap" rel="stylesheet">
@@ -10,96 +11,76 @@
 <section class="content container">
     <div class="d-flex">
         <div class="col-md-6">
-            <div class="card stories">
-                <div class="card-body">
-                    <button class="story">
-                        <div class="story__avatar">
-                            <svg class="rounded-circle account-img" src="{{request.user.profile.image.url}}" width="64"
-                                height="64" xmlns="#" style="object-fit: cover;">
-                                <circle r="31" cy="32" cx="32" />
-                            </svg>
-                        </div>
-                        <span class="story__user">@{{request.user.username}}</span>
-                    </button>
-                    <button class="story">
-                        <div class="story__avatar">
-                            <svg src="#" width="64" height="64" xmlns="#" style="object-fit: cover;">
-                                <circle r="31" cy="32" cx="32" />
-                            </svg>
-                        </div>
-                        <span class="story__user">@wambura</span>
-                    </button>
-                    <button class="story">
-                        <div class="story__avatar">
-
-                            <svg src="#" width="64" height="64" xmlns="#" style="object-fit: cover;">
-                                <circle r="31" cy="32" cx="32" />
-                            </svg>
-                        </div>
-                        <span class="story__user">@wambura</span>
-                    </button>
-                    <button class="story">
-                        <div class="story__avatar">
-
-                            <svg src="#" width="64" height="64" xmlns="#" style="object-fit: cover;">
-                                <circle r="31" cy="32" cx="32" />
-                            </svg>
-                        </div>
-                        <span class="story__user">@wambura</span>
-                    </button>
-                </div>
-            </div>
-
-            <br>
             <!-- **********************POST SECTION********************** -->
-            <article class="media content-section card" style="margin-left: 5%;">
+            <div class="media content-section card" style="margin-left: 5%;">
                 {% for post in posts %}
                 <div class="d-flex">
-                    <div class="user-image">
-                        <img class="rounded-circle article-image" src="{{request.user.profile.image.url}}" alt=""
-                            width="66" height="66">
+                    <div class="user-image ml-2 mt-2">
+                        <img class="rounded-circle article-image" src="{{post.user.profile.image.url}}" alt=""
+                            width="45" height="45">
                     </div>
-                    <h2 class="ml-3 pt-2">
+                    <h5 class="ml-2 pt-3">
                         <small><strong>{{post.user}}</strong></small>
-                    </h2>
-                </div><br>
+                    </h5>
+                </div>
+                <p></p>
                 <div class="media-body">
                     <a href="{% url 'post-detail' post.id %}"><img class="post_media" src="{{ post.picture.url }}"
                             alt="Post" style="width: 500px; height: 348px; object-fit: cover;"></a>
+                    <p></p>
                     <div class="d-flex">
-                        <div class="like-button">
-                            <a href="#"><img src="{% static 'images/like.png' %}" alt="" width="30"></a>
+                        <div class="like-button ml-3">
+                            <a href="{% url 'like' operation='like' pk=post.id%}"><img
+                                    src="{% static 'images/love.png' %}" alt="" width="25"></a>
                         </div>
-                        <div class="like-count">
-                            <p>{{post.likes.count}}</p>
+                        <div class="comment-button ml-3">
+                            <a href="{%url 'comment' pk=post.id%}"><img src="{% static 'images/comment.png' %}" alt=""
+                                    width="25"></a>
                         </div>
-                        <div class="comment-button">
-                            <a href="#"><img src="{% static 'images/comment.png' %}" alt="" width="30"></a>
-                        </div>
-                        <div class="comment-count">
-                            <p>{{post.comments.count}}</p>
-                        </div>
+                         <div class="send-button ml-3">
+                             <a href="#"><img src="{% static 'images/send.png' %}" alt="" width="25"></a>
+                         </div>
                     </div>
                 </div>
                 <div class="d-flex">
-                    <div class="user-image">
-                        <img class="rounded-circle article-image" src="{{ request.user.profile.image.url}}" alt=""
-                            width="50" height="50">
+                    <div class="like-section">
+                        {% if post.likes >= 1 %}
+                        <label class="ml-3">Liked by: {{post.likes}}</label>
+                        {% endif %}
+                        <p><strong class="ml-3">{{post.user}} </strong>{{post.caption}}</p>
+                        {% for comment in comments %}
+                        {% if post.id == comment.post.id %}
+                        <p><strong>{{comment.user}}</strong> {{comment.comment}}</p>
+                        {% endif %}
+                        {%endfor%}
+                        {{form.media}}
+                        <form action="{%url 'comment' pk=post.id%}" method="post" enctype="multipart/form-data"
+                            id="comment">
+                            {%csrf_token%}
+                            {% for field in form %}
+                            {% bootstrap_field field %}
+                            {% endfor %}
+                        </form>
+                        {% block scripts %}
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                        {% bootstrap_javascript %}
+                        {% endblock %}
                     </div>
-                    <div class="media-body ml-3 pt-3">
-                        <p>Liked by <p>{{post.likes.count}}</p>{{post.post_likes}}</p>
-                    </div>
+                    <!-- <div class="media-body ml-3 pt-3">
+                        <p>Liked by: <p>{{post.like.count}}</p>{{post.likes}}</p>
+                    </div> -->
                 </div>
-                <div class="post__description">
-                    <span>
-                        <a class="post__name--underline" href="#"><b>@{{post.user.username}}</b></a>
-                        {{post.caption}}
-
-                    </span>
-                </div>
-                <small class="text-muted">{{ post.posted|timesince }}</small>
+                <small class="text-muted ml-3">{{ post.posted|timesince}} ago</small>
+                <p></p>
+                <form action="{%url 'comment' pk=post.id%}" class="form-group ml-1 p-8 d-flex">
+                    <input type="text" class="form-control pl-5 pr-5" placeholder="Add a comment">
+                    <span><button class="btn btn-info" value="">Post</button></span>
+                    <hr>
+                </form>
+                <hr>
                 {% endfor %}
-            </article>
+            </div>
+            <p></p><br>
         </div>
 
     <!-- **********SIDE MENU********* -->
@@ -107,18 +88,22 @@
         <div class="sidebar-right">
             <div class="sidebar sidebar-sticky" style="padding: 0 40px;">
                 <div class="d-flex">
-                    <div class="user-image">
-                        <a href="#" target="_blank" class="side-menu__user-avatar">
-                            <img class="rounded-circle account-img" src="{{ request.user.profile.image.url }}"
-                                alt="course image" height="100" width="100">
-                        </a>
+                    <div class="d-flex">
+                        <div class="user-image ml-2">
+                            <img class="rounded-circle article-image" src="{{request.user.profile.image.url}}" alt=""
+                                width="48" height="48">
+                        </div>
+                        <h5 class="ml-2 pt-2">
+                            <small><strong>{{post.user}}</strong></small>
+                        </h5>
                     </div>
-                    <div class="username ml-3 pt-4">
+                    <div class="username ml-3 pt-2">
                         <span>{{user.username}}</span><br>
                         <span class="text-secondary">{{user.username}}</span>
                     </div>
-                    <div class="switch  pt-4" style="margin-left:170px;">
-                        <small><a class="side-menu__user-button">switch</a></small>
+                     <div class="form-group ml-3 pt-2">
+                         <a href="{% url 'update_profile' %}"><button class="form-btn btn-md" type="submit"
+                                 value="Update">Edit Profile</button></a>
                     </div>
                 </div>
                 <br>
@@ -130,6 +115,10 @@
                         <small><a class="user-button">see all</a></small>
                     </div>
                 </div>
+                 <a href="/follow/follow/{{profile.user.id}}/"
+                     class="btn btn-outline-secondary btn-sm">{{follow}}follow</a>
+                 <a href="/follow/unfollow/{{profile.user.id}}/"
+                     class="btn btn-outline-secondary btn-sm">{{unfollow}}unfollow</a>
 
                 <div class="side-menu__suggestions-content">
                     {% for user in users %}
@@ -142,7 +131,6 @@
                         <a href="{% url 'profile' user %}" class="side-menu__suggestion-avatar">
                             <img src="{{user.profile.image.url}}" alt="User Picture">
                         </a>
-
                         <div class="side-menu__suggestion-info">
                             {% if user.profile.first_name %}
                             <a href="{% url 'profile' user %}">{{user.profile.first_name|title}}
