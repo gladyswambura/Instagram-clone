@@ -25,7 +25,7 @@
                 </div>
                 <p></p>
                 <div class="media-body">
-                    <a href="{% url 'post-detail' post.id %}"><img class="post_media" src="{{ post.picture.url }}"
+                    <a href="{% url 'post-detail' post.id %}"><img class="image-responsive" src="{{ post.picture.url }}"
                             alt="Post" style="width: 500px; height: 348px; object-fit: cover;"></a>
                     <p></p>
                     <div class="d-flex">
@@ -34,7 +34,7 @@
                                     src="{% static 'images/love.png' %}" alt="" width="25"></a>
                         </div>
                         <div class="comment-button ml-3">
-                            <a href="{%url 'comment' pk=post.id%}"><img src="{% static 'images/comment.png' %}" alt=""
+                            <a href="{% url 'comment' pk=post.id %}"><img src="{% static 'images/comment.png' %}" alt=""
                                     width="25"></a>
                         </div>
                          <div class="send-button ml-3">
@@ -54,7 +54,7 @@
                         {% endif %}
                         {%endfor%}
                         {{form.media}}
-                        <form action="{%url 'comment' pk=post.id%}" method="post" enctype="multipart/form-data"
+                        <form action="{%url 'comment' pk=post.id %}" method="post" enctype="multipart/form-data"
                             id="comment">
                             {%csrf_token%}
                             {% for field in form %}
@@ -74,7 +74,7 @@
                 <p></p>
                 <form action="{%url 'comment' pk=post.id%}" class="form-group ml-1 p-8 d-flex">
                     <input type="text" class="form-control pl-5 pr-5" placeholder="Add a comment">
-                    <span><button class="btn btn-info" value="">Post</button></span>
+                    <span><button class="btn btn-info" value="comment">Post</button></span>
                     <hr>
                 </form>
                 <hr>
