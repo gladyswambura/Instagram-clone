@@ -11,7 +11,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://kit.fontawesome.com/fc1e235b2e.js"></script>
     <link rel="stylesheet" href="{% static 'images/style.css' %}">
-    <title>Edit-Profile</title>
+    <title>Hello, Kindly update your Profile</title>
 </head>
 <body>
     <div class="container">
@@ -19,7 +19,7 @@
             <div class="col-md-3"></div>
             <div class="col-md-6">
                 <div class="form-data">
-                    <form action="{% url 'newpost' %}" method="POST" enctype="multipart/form-data">
+                    <form action="{% url 'index' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% bootstrap_form updateprofile %}
                         <div class="form-group">

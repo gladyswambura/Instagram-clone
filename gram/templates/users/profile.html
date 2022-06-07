@@ -22,7 +22,7 @@
                             <h2>{{user.username}}</h2>
                         </div>
                         <div class="form-group ml-3 pt-2">
-                            <a href="{% url 'update_profile' %}" ><button class="form-btn btn-md" type="submit"
+                            <a href="{% url 'update_profile' %}"><button class="form-btn btn-md" type="submit"
                                 value="Update">Edit Profile</button></a>
                         </div>
                         <div class="setting ml-3 pt-2">
@@ -58,15 +58,6 @@
         <h4 class="text-center">Posts</h4>
         <div class="card-columns" style="margin-left: 5%;">
         {% for post in posts %}
-        <div class="d-flex">
-            <div class="user-image">
-                <img class="rounded-circle article-image" src="{{request.user.profile.image.url}}" alt="" width="66"
-                    height="66">
-            </div>
-            <h2 class="ml-3 pt-2">
-                <small><strong>{{post.user}}</strong></small>
-            </h2>
-        </div><br>
         <div class="media-body">
             <img src="{{user.post.picture.url}}" class="img-thumbnail" alt="Image" onclick="window.open(this.src)">
             <div class="d-flex">
@@ -97,6 +88,9 @@
         <p>{{post.caption}}</p>
         {% endfor %}
         <small class="text-muted">{{ post.created_at|date:"F j, Y" }}</small>
+        <form action="" class="form-group">
+            <input type="text" class="form-control" placeholder="Add a comment...">
+        </form>
         {% endfor %}
     </div>
 </div>

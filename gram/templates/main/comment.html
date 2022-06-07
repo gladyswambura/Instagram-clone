@@ -6,12 +6,12 @@
 <title>Comments</title>
 {{form.media}}
 <div class="card mx-auto" style="max-width:50rem; margin-top:50px;">
-    <form action="{% url 'index' %}" method="post" enctype="multipart/form-data">
+      <form action="{% url 'comment' %}" method="post" enctype="multipart/form-data">
         {%csrf_token%}
         {% for field in form %}
         {% bootstrap_field field %}
         {% endfor %}
-        <input type="submit" class="btn btn-success btn-lg" value="Post">
+        <input type="submit" class="btn btn-success btn-lg" placeholder="comment here" value="Post">
     </form>
 </div>
 {% block scripts %}

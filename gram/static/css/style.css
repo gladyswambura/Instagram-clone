@@ -1,0 +1,32 @@
+li a {
+    justify-content: space-between;
+    padding: 20;
+}
+form.form-inline input[type=search] {
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float: left;
+    width: 80%;
+    background: #f5f5f5;
+}
+.stories {
+    align-items: center;
+    margin-left: 45px;
+}
+p .has-separator:before {
+    content: "";
+    border: 1px solid blue;
+    position: absolute;
+    width: 50%;
+    top: 8px;
+    left: -45px;
+}
+p .has-separator:after {
+    content: "";
+    border: 1px solid blue;
+    width: 50%;
+    position: absolute;
+    top: 8px;
+    right: -45px;
+}
