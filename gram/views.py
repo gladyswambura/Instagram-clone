@@ -28,7 +28,8 @@ def search(request):
 @login_required(login_url='/accounts/login/')
 def index(request):
     posts = Post.objects.all().order_by('-posted')
-    return render(request, 'main/index.html',{'posts':posts})
+    users = User.objects.all()
+    return render(request, 'main/index.html',{'posts':posts, 'users':users})
 
 
 # NEW POST FUNCTION

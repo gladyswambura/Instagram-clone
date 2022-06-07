@@ -122,10 +122,21 @@
 
                 <div class="side-menu__suggestions-content">
                     {% for user in users %}
-                    {% if request.user.username != user.username %}
+
+                    <!-- {%for userone in users%}
+                    {% if userone != current_user%}
+                    <li class="followuser">
+                        <img src="{{userone.profile.profile_image.url}}" />
+                        <a class="username" href="{{userone.profile.profile_}}""">{{userone.username}}</a>
+                        <a href="{{user.profile}}">Follow</a>
+                    </li>
+                    {%endif%}
+                    {%endfor%} -->
+
+                    {% if user != current_user %}
                     <div class="side-menu__suggestion">
                         <a href="{% url 'profile' user %}" target="_blank" class="side-menu__user-avatar">
-                            <img class="rounded-circle account-img" src="{{ request.user.profile.image.url }}"
+                            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}"
                                 alt="course image" height="100" width="100">
                         </a>
                         <a href="{% url 'profile' user %}" class="side-menu__suggestion-avatar">
