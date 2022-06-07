@@ -15,9 +15,10 @@ urlpatterns = [
     path('newpost', app_views.NewPost, name='newpost'),
     path('post/<int:pk>/', views.PostDetail, name='post-detail'),
     re_path(r'^like/(?P<operation>.+)/(?P<pk>\d+)/',views.like, name='like'),
-    # path('comment/<int:pk>/', views.add_comment, name='comment'),
-    re_path(r'^comment/(?P<pk>\d+)',views.add_comment,name='comment'),
-    
+    re_path(r'^all/(?P<pk>\d+)', views.all, name='all'),
+    path('comment/<int:pk>/', views.add_comment, name='comment'),
+    # re_path(r'^comment/(?P<pk>\d+)',views.add_comment, name='comment'),
+    re_path(r'^search/', views.search_results, name='search_results'),
 ]
 
 if settings.DEBUG:
