@@ -8,7 +8,7 @@
         <div class="col-md-6">
             <h2 class="text-center">Create A New Post</h2>
             <hr>
-             <form method="POST" enctype="multipart/form-data" class="mb-5">
+             <form action="" method="POST" enctype="multipart/form-data" class="mb-5">
                  {% csrf_token %}
                  <div class="form-group mb-3">
                      <label for="file">Select image file</label>
@@ -24,6 +24,5 @@
         <div class="col-md-3"></div>
     </div>
 </div>
-</div
-{{ form.media }}
+</div>
 {% endblock %}
