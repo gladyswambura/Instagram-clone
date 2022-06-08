@@ -1,14 +1,13 @@
 from django.test import TestCase
-from .models import Comment, Profile, Image
-from django.contrib.auth.models import User
+from .models import Comment, Profile, Post
 # Create your tests here.
 
 class ProfileTestCase(TestCase):
     def setUp(self):
-        self.user = User(username='hezron')
-        self.user.save()
+        self.first_name = Profile(first_name='gladys')
+        self.first_name.save()
         self.profile = Profile(id=12 ,profile='image.jpg', bio='Test profile',
-                                    user=self.user)
+                                    first_name=self.first_name)
 
     def test_instance(self):
         self.assertTrue(isinstance(self.profile, Profile))
