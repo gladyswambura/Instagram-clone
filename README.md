@@ -1,7 +1,6 @@
 ## Instagram-Clone
 
- ## By 
- - Gladys Wambura 
+ # By :  *Gladys Wambura* 
 
  ## Description 
 
@@ -56,9 +55,9 @@
 * CSS - For Styling User Interface
 
 ## Contacts
-**gladyswahito7@gmail.com**
+*gladyswahito7@gmail.com*
 
-## live link : https://gladysgram.herokuapp.com/
+# live link : https://gladysgram.herokuapp.com/
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
