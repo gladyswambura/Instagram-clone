@@ -28,7 +28,7 @@
 
 1. Clone this repo: git clone [Github](https://github.com/gladyswambura/Instagram-clone)
 2. The repo comes in a zipped or compressed format. Extract to your prefered location and open it.
-3. open your terminal and navigate to gallery then create a virtual environment.For detailed guide refer  [here](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/)
+3. open your terminal and navigate to gallery then create a virtual environment.For detailed guide refer  [here](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/)
 3. To run the app, you'll have to run the following commands in your terminal:
 
      
